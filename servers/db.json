@@ -1,0 +1,28 @@
+{
+  "student": [
+    {
+      "id": "c142",
+      "name": "Phạm Thái Sơn",
+      "age": "18",
+      "grade": "12A10"
+    },
+    {
+      "id": "3ff4",
+      "name": "Trần Việt Anh",
+      "age": "18",
+      "grade": "12B1"
+    },
+    {
+      "id": "d454",
+      "name": "Vũ Văn Đoàn",
+      "age": "19",
+      "grade": "12A1"
+    },
+    {
+      "id": "3613",
+      "name": "Phạm Thành Đạt",
+      "age": "18",
+      "grade": "12D3"
+    }
+  ]
+}
