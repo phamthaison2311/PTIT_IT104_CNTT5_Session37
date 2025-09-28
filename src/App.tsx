@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import FilterSearch from "./components/FilterSearch";
-import TodoListStudent from "./components/TodoListStudent";
+import TodoListBook from "./components/TodoListBooks";
 import AddForm from "./components/AddForm";
 
 export default function App() {
@@ -10,20 +10,20 @@ export default function App() {
     <div className="container">
       <h1 className="header">
         <span role="img" aria-label="graduation-cap">
-          🎓
+          📚
         </span>
-        Student Manager
+        Book Library Manager
       </h1>
 
       <button className="add-button" onClick={() => setShow(true)}>
-        ADD STUDENT
+        ADD BOOK
       </button>
 
       {/* Tìm kiếm lọc và sắp xếp */}
       <FilterSearch />
 
       {/* Danh sách sinh viên */}
-      <TodoListStudent />
+      <TodoListBook />
 
       {show && <AddForm onClose={() => setShow(false)} />}
     </div>

@@ -13,11 +13,11 @@ export default function FilterSearch() {
         <div className="floating-select">
           <select required>
             <option value="all">Tất cả</option>
-            <option value="10">Grade 10</option>
-            <option value="11">Grade 11</option>
-            <option value="12">Grade 12</option>
+            <option value="history">History</option>
+            <option value="science">Science</option>
+            <option value="novel"></option>
           </select>
-          <label>Grade</label>
+          <label>Category</label>
         </div>
 
         <div className="floating-select">

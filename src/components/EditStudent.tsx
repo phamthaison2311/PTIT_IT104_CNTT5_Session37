@@ -2,60 +2,58 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "../stores/store";
-import { fetchStudents } from "../stores/reducers/studentSlice";
+import { fetchBooks } from "../stores/reducers/bookSlice";
+
+interface Book {
+  id: number;
+  title: string;
+  year: number;
+  category: string; 
+}
 
 interface EditFormProps {
   onClose: () => void;
-  student: {
-    id: number;
-    name: string;
-    age: number;
-    grade: string;
-  };
+  book: Book;
 }
 
-export default function EditForm({ onClose, student }: EditFormProps) {
-  const [name, setName] = useState(student.name);
-  const [age, setAge] = useState(student.age.toString());
-  const [grade, setGrade] = useState(student.grade);
-
+export default function EditFormBook({ onClose, book }: EditFormProps) {
+  const [title, setTitle] = useState(book.title);
+  const [year, setYear] = useState<string>(book.year.toString());
+  const [category, setCategory] = useState<string>(book.category.toString());
   const [error, setError] = useState("");
-  const dispatch: AppDispatch = useDispatch();
-  const allStudents = useSelector((state: RootState) => state.students.list);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const allBooks = useSelector((state: RootState) => state.books.list);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validation
-    if (!name.trim()) {
-      return setError("Tên sinh viên không được để trống");
+    // Validate
+    if (!title.trim()) return setError("Title không được để trống");
+
+    // Không trùng title (trừ chính nó)
+    if (allBooks.some((b) => b.title.trim() === title.trim() && b.id !== book.id)) {
+      return setError("Title đã tồn tại");
     }
 
-    if (
-      allStudents.some(
-        (s) => s.name === name && s.id !== student.id
-      )
-    ) {
-      return setError("Tên sinh viên đã tồn tại");
+    const yearNum = Number(year);
+    if (!year || Number.isNaN(yearNum) || yearNum <= 0) {
+      return setError("Year phải là số > 0");
     }
 
-    const ageNum = Number(age);
-    if (!age || isNaN(ageNum) || ageNum <= 0) {
-      return setError("Tuổi phải lớn hơn 0 và không được để trống");
-    }
-
-    if (!grade.trim()) {
-      return setError("Tên lớp học không được để trống");
+    if (!category.toString().trim()) {
+      return setError("Category không được để trống");
     }
 
     try {
-      await axios.put(`http://localhost:8080/student/${student.id}`, {
-        id: student.id,
-        name,
-        age: ageNum,
-        grade,
+      await axios.put(`http://localhost:8080/book/${book.id}`, {
+        id: book.id,
+        title: title.trim(),
+        year: yearNum,
+        category: category.trim(), 
       });
-      dispatch(fetchStudents());
+
+      await dispatch(fetchBooks());
       onClose();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
@@ -66,35 +64,35 @@ export default function EditForm({ onClose, student }: EditFormProps) {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2>Edit Student</h2>
+        <h2>Edit Book</h2>
         <form onSubmit={handleSave}>
           {error && <p style={{ color: "red", marginBottom: 10 }}>{error}</p>}
 
           <div className="form-group">
             <input
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
-            <label>Name</label>
+            <label>Title</label>
           </div>
 
           <div className="form-group">
             <input
               type="number"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
             />
-            <label>Age</label>
+            <label>Year</label>
           </div>
 
           <div className="form-group">
             <input
               type="text"
-              value={grade}
-              onChange={(e) => setGrade(e.target.value)}
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
             />
-            <label>Grade</label>
+            <label>Category</label>
           </div>
 
           <div className="modal-actions">
